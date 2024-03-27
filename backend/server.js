@@ -3,15 +3,14 @@
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import express from "express";
+import { app, server } from "./socket/socket.js";
 
+import connectToDb from "./db/connectToDb.js";
 import authRoutes from "./routes/auth.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import userRoutes from "./routes/user.routes.js";
 
-import connectToDb from "./db/connectToDb.js";
-
-const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5173;
 
 dotenv.config();
 app.use(express.json());
@@ -26,7 +25,7 @@ app.get("/", (req, res) => {
   res.send("Hello, MERN stack!");
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   connectToDb();
   console.log(`Server is running on port ${PORT}`);
 });

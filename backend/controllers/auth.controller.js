@@ -2,7 +2,6 @@ import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
 
-
 export const signup = async (req, res) => {
   try {
     const { fullName, username, password, confirmPassword, gender } = req.body;
@@ -64,27 +63,27 @@ export const login = async (req, res) => {
     );
 
     if (!user || !isPasswordCorrect) {
-      return res.status(400).json({ error: "Invalid username or password" });
+      return res.status(400).send({ error: "Invalid username or password" });
     }
 
     generateTokenAndSetCookie(user._id, res);
-   
-    res.status(200).json({
+
+    res.status(200).send({
       _id: user._id,
       fullName: user.fullName,
       username: user.username,
       profilePic: user.profilePic,
     });
   } catch (error) {
-    console.log(req.body);
     console.log("Error in login controller", error.message);
     res.status(500).send({ error: "Internal Server Error" });
   }
 };
-export const logout = async (req, res) => {
+
+export const logout = (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });
-    res.status(200).send({ message: "Logout succesfull" });
+    res.status(200).send({ message: "Logged out successfully" });
   } catch (error) {
     console.log("Error in logout controller", error.message);
     res.status(500).send({ error: "Internal Server Error" });
